@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ojeda Labs</title>
+<meta name="description" content="Bots, SaaS e infraestrutura Bitcoin por Felipe Ojeda">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ground: #F5F6FA;
+    --surface: #FFFFFF;
+    --surface-raised: #FFFFFF;
+    --border: #D8DCE6;
+    --border-faint: #E8EBF0;
+    --text: #14171F;
+    --text-secondary: #5A6070;
+    --text-muted: #8B91A0;
+    --accent: #C06B12;
+    --accent-soft: #FDF2E3;
+    --accent-hover: #A85A0A;
+    --tag-bg: #EEF0F6;
+    --tag-text: #4A5060;
+    --live-dot: #22C55E;
+    --card-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    --card-shadow-hover: 0 8px 24px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.04);
+    --section-text: #6B7280;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0C0F16;
+      --surface: #151921;
+      --surface-raised: #1C212C;
+      --border: #2A3040;
+      --border-faint: #1E2430;
+      --text: #E2E5ED;
+      --text-secondary: #9AA0B0;
+      --text-muted: #606878;
+      --accent: #E09030;
+      --accent-soft: rgba(224,144,48,.12);
+      --accent-hover: #F0A040;
+      --tag-bg: #1E2430;
+      --tag-text: #9AA0B0;
+      --live-dot: #34D399;
+      --card-shadow: 0 1px 3px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.2);
+      --card-shadow-hover: 0 8px 24px rgba(0,0,0,.4), 0 2px 6px rgba(0,0,0,.2);
+      --section-text: #707888;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0C0F16;
+    --surface: #151921;
+    --surface-raised: #1C212C;
+    --border: #2A3040;
+    --border-faint: #1E2430;
+    --text: #E2E5ED;
+    --text-secondary: #9AA0B0;
+    --text-muted: #606878;
+    --accent: #E09030;
+    --accent-soft: rgba(224,144,48,.12);
+    --accent-hover: #F0A040;
+    --tag-bg: #1E2430;
+    --tag-text: #9AA0B0;
+    --live-dot: #34D399;
+    --card-shadow: 0 1px 3px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.2);
+    --card-shadow-hover: 0 8px 24px rgba(0,0,0,.4), 0 2px 6px rgba(0,0,0,.2);
+    --section-text: #707888;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--text);
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    padding-inline: 20px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  h1, h2, h3 { font-family: 'Syne', system-ui, sans-serif; line-height: 1.2; margin: 0; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-hover); }
+
+  /* Header */
+  .header {
+    padding-block: 48px 32px;
+    border-bottom: 1px solid var(--border-faint);
+    margin-bottom: 40px;
+  }
+  .header-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .header-mark {
+    width: 42px; height: 42px;
+    background: var(--accent); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fira Code', monospace; font-weight: 500; font-size: 18px; color: #fff; flex-shrink: 0;
+  }
+  .header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+  .header p { color: var(--text-secondary); font-size: 16px; margin: 0; max-width: 56ch; }
+  .header .mono { font-family: 'Fira Code', monospace; font-size: 14px; color: var(--accent); }
+  .stats { display: flex; gap: 32px; margin-top: 20px; flex-wrap: wrap; }
+  .stat { display: flex; align-items: baseline; gap: 6px; }
+  .stat-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; font-variant-numeric: tabular-nums; color: var(--text); }
+  .stat-label { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* Sections */
+  .section { margin-bottom: 40px; }
+  .section-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-faint);
+  }
+  .section-head h2 { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+  .section-count {
+    font-family: 'Fira Code', monospace; font-size: 12px;
+    background: var(--tag-bg); color: var(--tag-text);
+    padding: 2px 8px; border-radius: 10px;
+  }
+
+  /* Grid */
+  .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 620px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 620px) { .grid .span-2 { grid-column: 1 / -1; } }
+
+  /* Card */
+  .card {
+    background: var(--surface); border: 1px solid var(--border-faint); border-radius: 12px;
+    padding: 22px; box-shadow: var(--card-shadow);
+    transition: box-shadow .2s ease, transform .2s ease;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .card:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-2px); }
+  .card-head { display: flex; align-items: center; gap: 10px; }
+  .card-icon {
+    width: 34px; height: 34px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0; background: var(--accent-soft);
+  }
+  .card-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; flex: 1; }
+  .card-live {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; font-family: 'Fira Code', monospace;
+    color: var(--live-dot); text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .card-live::before {
+    content: ''; width: 7px; height: 7px; background: var(--live-dot);
+    border-radius: 50%; animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+  .card-badge-oss {
+    font-size: 10px; font-family: 'Fira Code', monospace;
+    color: var(--text-muted); border: 1px solid var(--border); border-radius: 4px;
+    padding: 1px 6px; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .card-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; }
+  .tag {
+    font-family: 'Fira Code', monospace; font-size: 10.5px;
+    padding: 2px 7px; border-radius: 5px;
+    background: var(--tag-bg); color: var(--tag-text);
+  }
+  .card-link {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 13px; font-weight: 600; color: var(--accent);
+    margin-top: 2px; width: fit-content;
+  }
+  .card-link:hover { color: var(--accent-hover); }
+  .card-link svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .arrow-svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; display: inline-block; vertical-align: middle; }
+
+  /* Featured layout */
+  @media (min-width: 620px) {
+    .card.featured { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .card.featured .featured-left { display: flex; flex-direction: column; gap: 10px; }
+    .card.featured .featured-right {
+      background: var(--surface-raised); border: 1px solid var(--border-faint);
+      border-radius: 8px; padding: 18px;
+      display: flex; flex-direction: column; gap: 7px;
+      font-family: 'Fira Code', monospace; font-size: 12px; color: var(--text-muted);
+    }
+    .card.featured .featured-right .line { display: flex; gap: 8px; }
+    .card.featured .featured-right .prompt { color: var(--accent); }
+    .card.featured .featured-right .val { color: var(--text-secondary); }
+  }
+
+  .footer {
+    border-top: 1px solid var(--border-faint);
+    padding-block: 24px 40px; text-align: center;
+    font-size: 13px; color: var(--text-muted);
+  }
+  .footer a { color: var(--text-secondary); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card { transition: none; }
+    .card-live::before { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <div class="header-mark">FO</div>
+    <h1>Ojeda Labs</h1>
+  </div>
+  <p>Bots, SaaS e infraestrutura Bitcoin construídos por <strong>Felipe Ojeda</strong> — dev full-stack e advogado em São Paulo. Stack padrão: <span class="mono">systemd + FastAPI + Cloudflare Tunnel</span>.</p>
+  <div class="stats">
+    <div class="stat"><span class="stat-val">26</span><span class="stat-label">Projetos</span></div>
+    <div class="stat"><span class="stat-val">26</span><span class="stat-label">Repos</span></div>
+    <div class="stat"><span class="stat-val">⚡</span><span class="stat-label">Lightning Native</span></div>
+  </div>
+</header>
+
+<!-- ═══ PLATAFORMAS & SAAS ═══ -->
+<section class="section">
+  <div class="section-head">
+    <h2>Plataformas &amp; SaaS</h2>
+    <span class="section-count">6</span>
+  </div>
+  <div class="grid">
+
+    <!-- Depix — featured -->
+    <article class="card featured span-2">
+      <div class="featured-left">
+        <div class="card-head">
+          <div class="card-icon">🔄</div>
+          <span class="card-name">Depix</span>
+          <span class="card-live">live</span>
+        </div>
+        <p class="card-desc">Site de compra de Depix com checkout em Depix Liquid, Depix Spark, BTC LN e BTC Onchain.</p>
+        <div class="card-tags">
+          <span class="tag">Flask</span><span class="tag">Docker</span><span class="tag">Liquid</span><span class="tag">Spark</span><span class="tag">Bitcoin</span><span class="tag">PIX</span>
+        </div>
+        <a class="card-link" href="https://depix.st" target="_blank" rel="noopener">depix.st <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+      </div>
+      <div class="featured-right">
+        <div class="line"><span class="prompt">$</span><span class="val">checkout depix.st</span></div>
+        <div class="line"><span class="prompt">&gt;</span><span class="val">Depix Liquid ✓</span></div>
+        <div class="line"><span class="prompt">&gt;</span><span class="val">Depix Spark ✓</span></div>
+        <div class="line"><span class="prompt">&gt;</span><span class="val">BTC Lightning ✓</span></div>
+        <div class="line"><span class="prompt">&gt;</span><span class="val">BTC Onchain ✓</span></div>
+        <div class="line"><span class="prompt">&gt;</span><span class="val">bot: @buydepixbot</span></div>
+      </div>
+    </article>
+
+    <!-- Bitcoin Faucet -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">⚡</div>
+        <span class="card-name">Bitcoin Faucet</span>
+        <span class="card-live">live</span>
+      </div>
+      <p class="card-desc">Faucet Lightning Network com anti-abuso avançado — fingerprint, PoW, challenge canvas, hCaptcha e bloqueio por ASN/IPv6 subnet.</p>
+      <div class="card-tags">
+        <span class="tag">FastAPI</span><span class="tag">Phoenixd</span><span class="tag">LNbits</span><span class="tag">SQLite</span><span class="tag">SPA</span>
+      </div>
+      <a class="card-link" href="https://bitcoinfaucet.st" target="_blank" rel="noopener">bitcoinfaucet.st <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- CartolaHACK -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">⚽</div>
+        <span class="card-name">CartolaHACK</span>
+        <span class="card-live">live</span>
+      </div>
+      <p class="card-desc">Otimizador de escalação para o Cartola FC. 20 times do Brasileirão. R$10/ano via PIX ou 3.000 sats via Lightning.</p>
+      <div class="card-tags">
+        <span class="tag">FastAPI</span><span class="tag">Python</span><span class="tag">PIX</span><span class="tag">Lightning</span>
+      </div>
+      <a class="card-link" href="https://cartolahack.org" target="_blank" rel="noopener">cartolahack.org <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- SeguidoresCripto -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">📈</div>
+        <span class="card-name">Seguidores Cripto</span>
+        <span class="card-live">live</span>
+      </div>
+      <p class="card-desc">SMM store — compra de seguidores, curtidas e visualizações com pagamento em PIX, BTC, Lightning e USDT.</p>
+      <div class="card-tags">
+        <span class="tag">Cloudflare Workers</span><span class="tag">GitHub Pages</span><span class="tag">HTML</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/seguidores-cripto" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- MARCOU -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">®️</div>
+        <span class="card-name">MARCOU</span>
+      </div>
+      <p class="card-desc">Sistema web para registro de marca no INPI. Busca de disponibilidade, contrato de honorários, pagamento PIX/LN e entrada automática.</p>
+      <div class="card-tags">
+        <span class="tag">React</span><span class="tag">INPI</span><span class="tag">PIX</span><span class="tag">Lightning</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/marcou" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- TrocaTroca Swap -->
+    <article class="card span-2">
+      <div class="card-head">
+        <div class="card-icon">🔀</div>
+        <span class="card-name">TrocaTroca Swap</span>
+        <span class="card-live">live</span>
+      </div>
+      <p class="card-desc">Bot Telegram de swap cripto multi-provedor (FixedFloat, SideShift, SimpleSwap, Pegasus, BrSwap). Suporte a BTC, LN, L-BTC, XMR, USDT, SOL e mais. Dois forks especializados: DepixSwap e SparkSwap.</p>
+      <div class="card-tags">
+        <span class="tag">Node.js</span><span class="tag">Telegraf</span><span class="tag">SQLite</span><span class="tag">FixedFloat</span><span class="tag">SideShift</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px 14px">
+        <a class="card-link" href="https://t.me/TrocaTrocabot" target="_blank" rel="noopener">@TrocaTrocabot <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        <a class="card-link" href="https://t.me/depixswapbot" target="_blank" rel="noopener">@depixswapbot <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        <a class="card-link" href="https://t.me/SparkSwapbot" target="_blank" rel="noopener">@SparkSwapbot <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ═══ BOTS ═══ -->
+<section class="section">
+  <div class="section-head">
+    <h2>Bots</h2>
+    <span class="section-count">7</span>
+  </div>
+  <div class="grid">
+
+    <!-- YT Download Bot -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">📥</div>
+        <span class="card-name">Video Download Bot</span>
+        <span class="card-live">live</span>
+      </div>
+      <p class="card-desc">Bot Telegram para download de vídeos do YouTube. Seletor de qualidade (1080p–360p + áudio), preview com thumbnail, pagamento Lightning/PIX.</p>
+      <div class="card-tags">
+        <span class="tag">Python</span><span class="tag">Docker</span><span class="tag">yt-dlp</span><span class="tag">PostgreSQL</span><span class="tag">Telegram</span>
+      </div>
+      <a class="card-link" href="https://t.me/ytdownloaderbot" target="_blank" rel="noopener">@ytdownloaderbot <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- OP_RETURN Bot -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">📜</div>
+        <span class="card-name">OP_RETURN Bot</span>
+        <span class="card-live">live</span>
+      </div>
+      <p class="card-desc">Bot Telegram + site para inscrever texto na blockchain Bitcoin via OP_RETURN. Electrum CLI, pagamento Lightning/PIX.</p>
+      <div class="card-tags">
+        <span class="tag">Python</span><span class="tag">Electrum</span><span class="tag">LNbits</span><span class="tag">Depix</span><span class="tag">Telegram</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/opreturn-bot" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- Spark Watchdog -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">👁️</div>
+        <span class="card-name">Spark Watchdog Bot</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">Bot Telegram que monitora carteiras Spark (só chaves públicas, sem custódia) e avisa mudanças de saldo e transações.</p>
+      <div class="card-tags">
+        <span class="tag">Python</span><span class="tag">Telegram</span><span class="tag">Spark</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/SparkWatchdogBot" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- Watchonly Bot -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🔍</div>
+        <span class="card-name">Watchonly Bot</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">Bot Telegram para monitoramento watch-only de endereços Bitcoin.</p>
+      <div class="card-tags">
+        <span class="tag">Python</span><span class="tag">Telegram</span><span class="tag">Bitcoin</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/Watchonlybot" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- Nostr Template Bot -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🟣</div>
+        <span class="card-name">Nostr Template Bot</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">Bot Python para publicar automaticamente no Nostr usando templates com placeholders de preço BTC, bloco atual e mais.</p>
+      <div class="card-tags">
+        <span class="tag">Python</span><span class="tag">Nostr</span><span class="tag">Binance API</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/nostr-template-bot" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- Depix Comparador -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">⚖️</div>
+        <span class="card-name">Depix Comparador</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">Comparador interativo de soluções Bitcoin para o ecossistema DePix.</p>
+      <div class="card-tags">
+        <span class="tag">HTML</span><span class="tag">JavaScript</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/depix-comparador" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- EstagADVBot -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">⚖️</div>
+        <span class="card-name">EstagADV Bot</span>
+        <span class="card-live">live</span>
+      </div>
+      <p class="card-desc">Bot Telegram assistente jurídico para advogados. Monitoramento DataJud/CNJ, pesquisa de jurisprudência com IA, calculadora de prazos (CPC art. 220) e exportação .ics.</p>
+      <div class="card-tags">
+        <span class="tag">Python</span><span class="tag">DataJud</span><span class="tag">Groq AI</span><span class="tag">Telegram</span><span class="tag">Depix</span>
+      </div>
+      <a class="card-link" href="https://t.me/EstagiarioAdvbot" target="_blank" rel="noopener">@EstagiarioAdvbot <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+  </div>
+</section>
+
+<!-- ═══ BITCOIN TOOLS ═══ -->
+<section class="section">
+  <div class="section-head">
+    <h2>Bitcoin Tools</h2>
+    <span class="section-count">8</span>
+  </div>
+  <div class="grid">
+
+    <!-- PokeWallet -->
+    <article class="card span-2">
+      <div class="card-head">
+        <div class="card-icon">🎮</div>
+        <span class="card-name">PokeWallet</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">Wallet Bitcoin autocustodial para Android com envio offline via BitChat/Nostr. Visual Game Boy Pokémon, BIP84/86 e Taproot/PSBT.</p>
+      <div class="card-tags">
+        <span class="tag">Kotlin</span><span class="tag">Android</span><span class="tag">BitChat</span><span class="tag">Nostr</span><span class="tag">Taproot</span><span class="tag">PSBT</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/PokeWallet" target="_blank" rel="noopener">GitHub ★2 <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- Origami Seed -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🦢</div>
+        <span class="card-name">Origami Seed</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">Gerador e validador BIP39 client-side. 100% offline, zero dependências.</p>
+      <div class="card-tags">
+        <span class="tag">JavaScript</span><span class="tag">BIP39</span><span class="tag">Offline</span>
+      </div>
+      <a class="card-link" href="https://origamiseed.com" target="_blank" rel="noopener">origamiseed.com <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- BIP39 Calculadora -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🔢</div>
+        <span class="card-name">BIP39 Calculadora Android App</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">App Android offline para cálculo de seed phrases BIP39. ★3 no GitHub.</p>
+      <div class="card-tags">
+        <span class="tag">Android</span><span class="tag">BIP39</span><span class="tag">Offline</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/Bip39Calculadora" target="_blank" rel="noopener">GitHub ★3 <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- Dominó BIP39 -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🁣</div>
+        <span class="card-name">Dominó BIP39</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">Gere seed phrases usando dominós físicos como fonte de entropia. Zero dependências, 100% offline.</p>
+      <div class="card-tags">
+        <span class="tag">HTML</span><span class="tag">BIP39</span><span class="tag">Entropia</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/Domino-BIP39" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- BIP39 Entropia Suite -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🎲</div>
+        <span class="card-name">BIP39 Entropia Suite</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">Coleção de geradores BIP39 com entropia física: dados de 6 faces, moedas, baralho e bingo. Todos offline e MIT.</p>
+      <div class="card-tags">
+        <span class="tag">HTML</span><span class="tag">BIP39</span><span class="tag">Dados</span><span class="tag">Moedas</span><span class="tag">Baralho</span><span class="tag">Bingo</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px 14px">
+        <a class="card-link" href="https://github.com/FelipeCOjeda/Bip39-Dados6" target="_blank" rel="noopener">Dados <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        <a class="card-link" href="https://github.com/FelipeCOjeda/bip39-moedas" target="_blank" rel="noopener">Moedas <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        <a class="card-link" href="https://github.com/FelipeCOjeda/Bip39-baralho" target="_blank" rel="noopener">Baralho <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        <a class="card-link" href="https://github.com/FelipeCOjeda/Bip39-Bingo" target="_blank" rel="noopener">Bingo <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        <a class="card-link" href="https://github.com/FelipeCOjeda/Passphrasegerator-dados6" target="_blank" rel="noopener">Passphrase Generator <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+      </div>
+    </article>
+
+    <!-- BTC Address Derivator -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🔑</div>
+        <span class="card-name">BTC Address Derivator</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">Derivação determinística BIP44/49/84/86, geração de descriptors (Sparrow/Specter), exportação CSV/JSON.</p>
+      <div class="card-tags">
+        <span class="tag">Python</span><span class="tag">BIP44</span><span class="tag">BIP84</span><span class="tag">BIP86</span><span class="tag">GUI</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/BTC-Adress-Derivator" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- Infopass Wallet -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🧠</div>
+        <span class="card-name">Infopass Wallet</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">Gerador determinístico de carteira Bitcoin BIP84 (Native SegWit) a partir de texto livre ou passphrase BIP39.</p>
+      <div class="card-tags">
+        <span class="tag">Python</span><span class="tag">BIP84</span><span class="tag">P2WPKH</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/Infopass-Wallet" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- BIP39 Checksum Calculator -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">✅</div>
+        <span class="card-name">BIP39 Checksum Calc</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">Calculadora de checksum para seed phrases BIP39.</p>
+      <div class="card-tags">
+        <span class="tag">HTML</span><span class="tag">BIP39</span><span class="tag">Checksum</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/bip39-Checksumcalculator" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+  </div>
+</section>
+
+<!-- ═══ INFRA & EDUCAÇÃO ═══ -->
+<section class="section">
+  <div class="section-head">
+    <h2>Infraestrutura &amp; Educação</h2>
+    <span class="section-count">3</span>
+  </div>
+  <div class="grid">
+
+    <!-- eternize.st -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🖥️</div>
+        <span class="card-name">eternize.st</span>
+        <span class="card-live">live</span>
+      </div>
+      <p class="card-desc">Servidor Debian ~4TB hospedando todos os projetos. systemd, Cloudflare Tunnel, acesso remoto via ttyd. 16GB RAM.</p>
+      <div class="card-tags">
+        <span class="tag">Debian</span><span class="tag">systemd</span><span class="tag">Cloudflare</span><span class="tag">ttyd</span>
+      </div>
+      <a class="card-link" href="https://eternize.st" target="_blank" rel="noopener">eternize.st <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- Sidechains Compare -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🔗</div>
+        <span class="card-name">Sidechains Compare</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">Comparativo de sidechains Bitcoin.</p>
+      <div class="card-tags">
+        <span class="tag">HTML</span><span class="tag">Bitcoin</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/sidechainscompare" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- NewbieHub -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🐣</div>
+        <span class="card-name">NewbieHub</span>
+        <span class="card-badge-oss">oss</span>
+      </div>
+      <p class="card-desc">Portal educacional Bitcoin para iniciantes. MIT License.</p>
+      <div class="card-tags">
+        <span class="tag">HTML</span><span class="tag">MIT</span>
+      </div>
+      <a class="card-link" href="https://github.com/FelipeCOjeda/NewbieHub" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+  </div>
+</section>
+
+<footer class="footer">
+  Felipe Ojeda ⚡ São Paulo · <a href="https://t.me/felipecojeda">Telegram</a> · <a href="https://github.com/FelipeCOjeda">GitHub</a>
+</footer>
+
+</body>
+</html>
