@@ -218,8 +218,8 @@
   </div>
   <p>Produtos, bots e ferramentas de Bitcoin criados por <strong>Felipe Ojeda</strong>, advogado e desenvolvedor em São Paulo.</p>
   <div class="stats">
-    <div class="stat"><span class="stat-val" data-total-projects>26</span><span class="stat-label">Projetos</span></div>
-    <div class="stat"><span class="stat-val" data-total-categories>4</span><span class="stat-label">Categorias</span></div>
+    <div class="stat"><span class="stat-val" data-total-projects>29</span><span class="stat-label">Projetos</span></div>
+    <div class="stat"><span class="stat-val" data-total-categories>5</span><span class="stat-label">Categorias</span></div>
     <div class="stat"><span class="stat-val">⚡</span><span class="stat-label">PIX + Lightning</span></div>
   </div>
 </header>
@@ -233,6 +233,7 @@
     <button class="filter-button" type="button" data-filter="bots" aria-pressed="false">Bots</button>
     <button class="filter-button" type="button" data-filter="bitcoin-tools" aria-pressed="false">Bitcoin Tools</button>
     <button class="filter-button" type="button" data-filter="infra" aria-pressed="false">Infra &amp; educação</button>
+    <button class="filter-button" type="button" data-filter="agregadores" aria-pressed="false">Agregadores</button>
   </div>
   <p class="result-count" id="result-count" role="status" aria-live="polite"></p>
 </div>
@@ -353,6 +354,59 @@
       <div class="card-tags">
         <span class="tag">FastAPI</span><span class="tag">Whisper</span><span class="tag">YouTube API</span><span class="tag">Groq</span><span class="tag">Pillow</span>
       </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ═══ AGREGADORES ═══ -->
+<section class="section">
+  <div class="section-head">
+    <h2>Agregadores</h2>
+    <span class="section-count">3</span>
+  </div>
+  <div class="grid">
+
+    <!-- Busca Bitcoin e Liberdade -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🔎</div>
+        <span class="card-name">Busca Bitcoin e Liberdade</span>
+        <span class="card-live">live</span>
+      </div>
+      <p class="card-desc">Catálogo pesquisável com vídeos, transcrições e artigos do canal Bitcoin e Liberdade. Reúne mais de 1.790 vídeos, com busca por conteúdo e opções de filtro.</p>
+      <div class="card-tags">
+        <span class="tag">Busca</span><span class="tag">Vídeos</span><span class="tag">Transcrições</span><span class="tag">Artigos</span><span class="tag">YouTube</span><span class="tag">Odysee</span><span class="tag">Archive.org</span>
+      </div>
+      <a class="card-link" href="https://felipecojeda.github.io/catalogo-busca/" target="_blank" rel="noopener">catalogo-busca <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- Centro de informações Moshe -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🌎</div>
+        <span class="card-name">Moshe Paraguai: vídeos e artigos</span>
+        <span class="card-live">live</span>
+      </div>
+      <p class="card-desc">Centro de informações sobre o Paraguai com vídeos e artigos pesquisáveis sobre residência, documentos, tributação, Bitcoin e outros temas. Permite filtrar por tipo de conteúdo.</p>
+      <div class="card-tags">
+        <span class="tag">Busca</span><span class="tag">Paraguai</span><span class="tag">Vídeos</span><span class="tag">Artigos</span><span class="tag">Moshe Internacional</span>
+      </div>
+      <a class="card-link" href="https://videos.mosheinternacional.com/" target="_blank" rel="noopener">videos.mosheinternacional.com <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+    </article>
+
+    <!-- Escola Bitcoin -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🎓</div>
+        <span class="card-name">Escola Bitcoin</span>
+        <span class="card-live">live</span>
+      </div>
+      <p class="card-desc">Biblioteca pesquisável com tutoriais e passo a passo para aprender Bitcoin na prática: carteiras, compra, saques, privacidade e segurança. Inclui playlist com 30 vídeos.</p>
+      <div class="card-tags">
+        <span class="tag">Busca</span><span class="tag">Tutoriais</span><span class="tag">Bitcoin</span><span class="tag">YouTube</span><span class="tag">Autocustódia</span>
+      </div>
+      <a class="card-link" href="https://escolabitcoin.com/" target="_blank" rel="noopener">escolabitcoin.com <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
     </article>
 
   </div>
@@ -680,6 +734,7 @@
       if (heading.includes('plataformas')) return 'plataformas';
       if (heading.includes('bots')) return 'bots';
       if (heading.includes('bitcoin tools')) return 'bitcoin-tools';
+      if (heading.includes('agregadores')) return 'agregadores';
       return 'infra';
     };
     const total = cards.length;
