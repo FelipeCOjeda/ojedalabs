@@ -184,6 +184,18 @@
     .card.featured .featured-right .val { color: var(--text-secondary); }
   }
 
+
+  .toolbar { margin: -16px 0 36px; display: grid; gap: 12px; }
+  .toolbar input { width: 100%; box-sizing: border-box; padding: 13px 15px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--text); font: inherit; }
+  .toolbar input:focus-visible, .filter-button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter-button { border: 1px solid var(--border); border-radius: 999px; padding: 7px 12px; background: var(--surface); color: var(--text-secondary); font: 600 12px 'DM Sans', sans-serif; cursor: pointer; }
+  .filter-button:hover, .filter-button.is-active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+  .result-count { margin: 0; color: var(--text-muted); font-size: 12px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .card-progress { border: 1px solid var(--border); border-radius: 999px; padding: 2px 7px; color: var(--text-muted); font-size: 10px; white-space: nowrap; }
+  .section[hidden], .card[hidden] { display: none !important; }
+
   .footer {
     border-top: 1px solid var(--border-faint);
     padding-block: 24px 40px; text-align: center;
@@ -204,19 +216,32 @@
     <div class="header-mark">FO</div>
     <h1>Ojeda Labs</h1>
   </div>
-  <p>Bots, SaaS e infraestrutura Bitcoin construídos por <strong>Felipe Ojeda</strong> — dev full-stack e advogado em São Paulo. Stack padrão: <span class="mono">systemd + FastAPI + Cloudflare Tunnel</span>.</p>
+  <p>Produtos, bots e ferramentas de Bitcoin criados por <strong>Felipe Ojeda</strong>, advogado e desenvolvedor em São Paulo.</p>
   <div class="stats">
-    <div class="stat"><span class="stat-val">26</span><span class="stat-label">Projetos</span></div>
-    <div class="stat"><span class="stat-val">26</span><span class="stat-label">Repos</span></div>
-    <div class="stat"><span class="stat-val">⚡</span><span class="stat-label">Lightning Native</span></div>
+    <div class="stat"><span class="stat-val" data-total-projects>0</span><span class="stat-label">Projetos</span></div>
+    <div class="stat"><span class="stat-val" data-total-categories>0</span><span class="stat-label">Categorias</span></div>
+    <div class="stat"><span class="stat-val">⚡</span><span class="stat-label">PIX + Lightning</span></div>
   </div>
 </header>
+
+<div class="toolbar" role="search" aria-label="Buscar projetos">
+  <label class="sr-only" for="project-search">Buscar por nome, descrição ou tecnologia</label>
+  <input id="project-search" type="search" placeholder="Buscar projeto ou tecnologia..." autocomplete="off">
+  <div class="filters" role="group" aria-label="Filtrar por categoria">
+    <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">Todos</button>
+    <button class="filter-button" type="button" data-filter="plataformas" aria-pressed="false">Plataformas</button>
+    <button class="filter-button" type="button" data-filter="bots" aria-pressed="false">Bots</button>
+    <button class="filter-button" type="button" data-filter="bitcoin-tools" aria-pressed="false">Bitcoin Tools</button>
+    <button class="filter-button" type="button" data-filter="infra" aria-pressed="false">Infra &amp; educação</button>
+  </div>
+  <p class="result-count" id="result-count" role="status" aria-live="polite"></p>
+</div>
 
 <!-- ═══ PLATAFORMAS & SAAS ═══ -->
 <section class="section">
   <div class="section-head">
     <h2>Plataformas &amp; SaaS</h2>
-    <span class="section-count">6</span>
+    <span class="section-count">7</span>
   </div>
   <div class="grid">
 
@@ -251,9 +276,9 @@
         <span class="card-name">Bitcoin Faucet</span>
         <span class="card-live">live</span>
       </div>
-      <p class="card-desc">Faucet Lightning Network com anti-abuso avançado — fingerprint, PoW, challenge canvas, hCaptcha e bloqueio por ASN/IPv6 subnet.</p>
+      <p class="card-desc">Faucet de Bitcoin via Lightning Network com mecanismos de proteção contra abuso e suporte a pagamentos pela Spark.</p>
       <div class="card-tags">
-        <span class="tag">FastAPI</span><span class="tag">Phoenixd</span><span class="tag">LNbits</span><span class="tag">SQLite</span><span class="tag">SPA</span>
+        <span class="tag">FastAPI</span><span class="tag">Phoenixd</span><span class="tag">LNbits</span><span class="tag">Spark</span><span class="tag">SQLite</span><span class="tag">SPA</span>
       </div>
       <a class="card-link" href="https://bitcoinfaucet.st" target="_blank" rel="noopener">bitcoinfaucet.st <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
     </article>
@@ -306,14 +331,27 @@
         <span class="card-name">TrocaTroca Swap</span>
         <span class="card-live">live</span>
       </div>
-      <p class="card-desc">Bot Telegram de swap cripto multi-provedor (FixedFloat, SideShift, SimpleSwap, Pegasus, BrSwap). Suporte a BTC, LN, L-BTC, XMR, USDT, SOL e mais. Dois forks especializados: DepixSwap e SparkSwap.</p>
+      <p class="card-desc">Bot Telegram de swap com múltiplos provedores, incluindo SideShift, Boltz, WizardSwap e Eigen. Aceita BTC, Lightning e XMR; há versões especializadas para Depix e Spark.</p>
       <div class="card-tags">
-        <span class="tag">Node.js</span><span class="tag">Telegraf</span><span class="tag">SQLite</span><span class="tag">FixedFloat</span><span class="tag">SideShift</span>
+        <span class="tag">Node.js</span><span class="tag">Telegraf</span><span class="tag">SQLite</span><span class="tag">SideShift</span><span class="tag">Boltz</span><span class="tag">WizardSwap</span><span class="tag">Eigen</span>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px 14px">
         <a class="card-link" href="https://t.me/TrocaTrocabot" target="_blank" rel="noopener">@TrocaTrocabot <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
         <a class="card-link" href="https://t.me/depixswapbot" target="_blank" rel="noopener">@depixswapbot <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
         <a class="card-link" href="https://t.me/SparkSwapbot" target="_blank" rel="noopener">@SparkSwapbot <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+      </div>
+    </article>
+
+    <!-- YTToolkit -->
+    <article class="card">
+      <div class="card-head">
+        <div class="card-icon">🎬</div>
+        <span class="card-name">YTToolkit</span>
+        <span class="card-progress">em desenvolvimento</span>
+      </div>
+      <p class="card-desc">Ferramenta para apoiar a produção e distribuição de vídeos: transcrição, SEO para YouTube, thumbnails, cortes e publicação em canais integrados.</p>
+      <div class="card-tags">
+        <span class="tag">FastAPI</span><span class="tag">Whisper</span><span class="tag">YouTube API</span><span class="tag">Groq</span><span class="tag">Pillow</span>
       </div>
     </article>
 
@@ -377,7 +415,7 @@
         <span class="card-name">Watchonly Bot</span>
         <span class="card-badge-oss">oss</span>
       </div>
-      <p class="card-desc">Bot Telegram para monitoramento watch-only de endereços Bitcoin.</p>
+      <p class="card-desc">Bot Telegram watch-only para acompanhar endereços e XPUBs Bitcoin, com alertas de movimentações.</p>
       <div class="card-tags">
         <span class="tag">Python</span><span class="tag">Telegram</span><span class="tag">Bitcoin</span>
       </div>
@@ -534,7 +572,7 @@
         <span class="card-name">Infopass Wallet</span>
         <span class="card-badge-oss">oss</span>
       </div>
-      <p class="card-desc">Gerador determinístico de carteira Bitcoin BIP84 (Native SegWit) a partir de texto livre ou passphrase BIP39.</p>
+      <p class="card-desc">Ferramenta experimental para derivação de carteira BIP84. Não use texto comum nem segredos fracos para proteger fundos reais.</p>
       <div class="card-tags">
         <span class="tag">Python</span><span class="tag">BIP84</span><span class="tag">P2WPKH</span>
       </div>
@@ -587,9 +625,9 @@
         <span class="card-name">eternize.st</span>
         <span class="card-live">live</span>
       </div>
-      <p class="card-desc">Servidor Debian ~4TB hospedando todos os projetos. systemd, Cloudflare Tunnel, acesso remoto via ttyd. 16GB RAM.</p>
+      <p class="card-desc">Infraestrutura própria para hospedar e monitorar aplicações, bots e serviços relacionados a Bitcoin.</p>
       <div class="card-tags">
-        <span class="tag">Debian</span><span class="tag">systemd</span><span class="tag">Cloudflare</span><span class="tag">ttyd</span>
+        <span class="tag">Linux</span><span class="tag">Cloudflare</span><span class="tag">Operação</span>
       </div>
       <a class="card-link" href="https://eternize.st" target="_blank" rel="noopener">eternize.st <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
     </article>
@@ -629,5 +667,59 @@
   Felipe Ojeda ⚡ São Paulo · <a href="https://t.me/felipecojeda">Telegram</a> · <a href="https://github.com/FelipeCOjeda">GitHub</a>
 </footer>
 
+
+<script>
+  (() => {
+    const cards = [...document.querySelectorAll('.section .card')];
+    const sections = [...document.querySelectorAll('.section')];
+    const search = document.getElementById('project-search');
+    const result = document.getElementById('result-count');
+    const buttons = [...document.querySelectorAll('.filter-button')];
+    const categoryFor = section => {
+      const heading = section.querySelector('h2')?.textContent.toLowerCase() || '';
+      if (heading.includes('plataformas')) return 'plataformas';
+      if (heading.includes('bots')) return 'bots';
+      if (heading.includes('bitcoin tools')) return 'bitcoin-tools';
+      return 'infra';
+    };
+    const total = cards.length;
+    document.querySelector('[data-total-projects]').textContent = total;
+    document.querySelector('[data-total-categories]').textContent = sections.length;
+    sections.forEach(section => {
+      section.dataset.category = categoryFor(section);
+      const count = section.querySelectorAll('.card').length;
+      section.querySelector('.section-count').textContent = count;
+    });
+    let selected = 'all';
+    const update = () => {
+      const query = search.value.trim().toLocaleLowerCase('pt-BR');
+      let visible = 0;
+      sections.forEach(section => {
+        let sectionVisible = 0;
+        section.querySelectorAll('.card').forEach(card => {
+          const matchesCategory = selected === 'all' || section.dataset.category === selected;
+          const matchesSearch = !query || card.textContent.toLocaleLowerCase('pt-BR').includes(query);
+          const show = matchesCategory && matchesSearch;
+          card.hidden = !show;
+          if (show) { visible++; sectionVisible++; }
+        });
+        section.hidden = sectionVisible === 0;
+        section.querySelector('.section-count').textContent = sectionVisible;
+      });
+      result.textContent = query || selected !== 'all' ? 'Exibindo ' + visible + ' de ' + total + ' projetos.' : total + ' projetos em ' + sections.length + ' categorias.';
+    };
+    search.addEventListener('input', update);
+    buttons.forEach(button => button.addEventListener('click', () => {
+      selected = button.dataset.filter;
+      buttons.forEach(item => {
+        const active = item === button;
+        item.classList.toggle('is-active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+      update();
+    }));
+    update();
+  })();
+</script>
 </body>
 </html>
